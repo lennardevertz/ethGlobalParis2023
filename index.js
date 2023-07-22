@@ -419,6 +419,8 @@ async function init() {
     connectedAccount = accounts[0];
     console.log(connectedAccount);
     await switchNetwork(web3, "goerli", provider);
+    document.getElementById("connectWallet").value = "Disconnect";
+    document.getElementById("connectedAddress").innerHTML = "(".concat(connectedAccount.substring(0, 6)).concat("...").concat(connectedAccount.substr(-4)).concat(")");
 }
 
 
