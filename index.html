@@ -46,7 +46,7 @@
                         <span class="text-sm">Twitter</span>
                     </div>
                     <div id="progressBarOuter" style="display: none;" class="w-full mt-4 bg-gray-200 rounded-full dark:bg-gray-700">
-                        <div id="progressBarInner" class="bg-orange-100 text-xs font-medium text-orange-500 text-center p-0.5 leading-none rounded-full" style="width: 33%">Step 1</div>
+                        <div id="progressBarInner" class="bg-orange-100 text-xs font-medium text-orange-500 text-center p-0.5 leading-none rounded-full" style="width: 20%">Step 1</div>
                     </div>
                     <div id="twitterDiv" style="display: none;">
                         <div class="flex justify-left">
@@ -69,8 +69,9 @@
                             <div onclick="makeAssertion()" class="mt-4 mb-2 ml-5 w-24 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-400 hover:cursor-pointer">Continue</div>
                         </div>
                     </div>
-                    <div id="successDiv" style="display: none;" class="items-left">
-
+                    <div id="finishDiv" style="display: none;" class="items-left">
+                        <p id="finalCta" class="text-left text-sm text-gray-500 mb-2 mt-3">Wait 2 minutes for the timer to finish</p>
+                        <div id="settleButton" style="display: none;" onclick="settle()" class="mt-2 w-24 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-400 hover:cursor-pointer">Finish</div>
                     </div>
                 </div>
                 <div class="flex items-center mb-2">

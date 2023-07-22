@@ -468,7 +468,7 @@ async function translateTwitter() {
     document.getElementById("tweetContent").innerHTML = userTweet;
     document.getElementById("twitterDiv").style.display = "none";
     const progressBarInner = document.getElementById("progressBarInner");
-    progressBarInner.style.width = "66%";
+    progressBarInner.style.width = "40%";
     progressBarInner.innerHTML = "Step 2";
 }
 
@@ -497,12 +497,26 @@ async function makeAssertion() {
     console.log(assertionId)
 
     // start 2 min waiting period
-
+    //progressBarInner.style.width = "60%";
+    //progressBarInner.innerHTML = "Step 3";
+    //document.getElementById("tweetContentDiv").style.display = "none";
+    //document.getElementById("finishDiv").style.display = "";
 }
 
 async function settle() {
     await settleContract.methods.settleAssertion(assertionId).send({ from: connectedAccount });
 }
+    //AFTER 2 MINUTES
+    //document.getElementById("finalCta").innerHTML = "Sign only one more transaction"
+    //document.getElementById("finishDiv").style.display = "";
+    //progressBarInner.style.width = "80%";
+    //progressBarInner.innerHTML = "Step 4";
+
+    //AFTER SETTLE COMPLETED
+    //document.getElementById("finalCta").innerHTML = "Verification completed!"
+    //document.getElementById("finishDiv").style.display = "none";
+    //progressBarInner.style.width = "100%";
+    //progressBarInner.innerHTML = "";
 
 function toggleTwitterDiv() {
     var twitterDiv = document.getElementById("twitterDiv");
