@@ -433,7 +433,25 @@ async function getTwitterID(identifier) {
 async function translateTwitter() {
     let twitterName = document.getElementById("twitterHandle").value;
     let userId = await getTwitterID(twitterName);
+    return await convert(userId, 'bytes32');
 }
+
+const convert = (value, toType) => {
+    let output;
+    if (toType === 'bytes32') {
+      const hexValue = web3.toHex(value);
+
+      output =  hexValue;
+    }
+    if (toType === 'string') {
+      try {
+        output = web3.toUtf8(value);
+      } catch (_error) {
+        output = web3.toAscii(value);
+      }
+    }
+    return output;
+  };
 
 async function makeAssertion(userId) {
     dataId = userId;
