@@ -25,7 +25,8 @@ Decentralized mechanism for verifying ownership of Twitter profiles.
 
 | Network   |      Contract      |       Address |
 |----------|:-------------:|:------:|
-| Goerli | [Oracle]() | XXXXXXXXXXXXXXXXXXXXXXXXXXXX |
+| Goerli | [Oracle](https://goerli.etherscan.io/address/0x82fccaa1c9d7130f8141109096c98b0c3d4fc5b6) | 0x82fccaa1c9d7130f8141109096c98b0c3d4fc5b6 |
+| Goerli | [Sample Registry](https://goerli.etherscan.io/address/0xb0eaed426dfb2aeeff37ec251aaa52af2ce525f8) | 0xb0eaed426dfb2aeeff37ec251aaa52af2ce525f8 |
 - Hardhat
 - Truffle Dashboard
 
