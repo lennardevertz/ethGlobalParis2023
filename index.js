@@ -489,7 +489,8 @@ async function makeAssertion() {
     asserter = connectedAccount;
 
     // make assertion
-    assertionId = await oracle.methods.assertDataFor(dataId, data, asserter).send({ from: connectedAccount });
+    let assertionIdTxn = await oracle.methods.assertDataFor(dataId, data, asserter).send({ from: connectedAccount });
+    assertionId = assertionIdTxn.events[3].raw.topics[1];
     console.log(assertionId)
 
     // start 2 min waiting period
