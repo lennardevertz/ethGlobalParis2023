@@ -1,14 +1,17 @@
 const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"));
 let oracleAddress = "0x82FcCAA1c9d7130f8141109096c98B0c3D4fC5B6"
+let settlementAddress = "0x9923D42eF695B5dd9911D05Ac944d4cAca3c4EAB"
 let registryAddress = "0xB0eAED426dFb2aEEFF37ec251aAA52aF2ce525F8"
 let web3;
 let connectedAccount;
 let provider;
 let oracle;
+let settleContract;
 let registry;
 let userId;
 let userHash;
 let userTweet;
+let assertionId;
 
 
 // load uma oracle contract
@@ -284,6 +287,11 @@ async function loadOracle(oracleAddress) {
     return await new defaultWeb3.eth.Contract(abiOracle, oracleAddress);
 }
 // load uma oracle contract
+async function loadSettleContract(settleAddress) {
+    let abiOracle = [{"inputs":[{"internalType":"contract FinderInterface","name":"_finder","type":"address"},{"internalType":"contract IERC20","name":"_defaultCurrency","type":"address"},{"internalType":"uint64","name":"_defaultLiveness","type":"uint64"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"contract IERC20","name":"defaultCurrency","type":"address"},{"indexed":false,"internalType":"uint64","name":"defaultLiveness","type":"uint64"},{"indexed":false,"internalType":"uint256","name":"burnedBondPercentage","type":"uint256"}],"name":"AdminPropertiesSet","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"assertionId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"caller","type":"address"},{"indexed":true,"internalType":"address","name":"disputer","type":"address"}],"name":"AssertionDisputed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"assertionId","type":"bytes32"},{"indexed":false,"internalType":"bytes32","name":"domainId","type":"bytes32"},{"indexed":false,"internalType":"bytes","name":"claim","type":"bytes"},{"indexed":true,"internalType":"address","name":"asserter","type":"address"},{"indexed":false,"internalType":"address","name":"callbackRecipient","type":"address"},{"indexed":false,"internalType":"address","name":"escalationManager","type":"address"},{"indexed":false,"internalType":"address","name":"caller","type":"address"},{"indexed":false,"internalType":"uint64","name":"expirationTime","type":"uint64"},{"indexed":false,"internalType":"contract IERC20","name":"currency","type":"address"},{"indexed":false,"internalType":"uint256","name":"bond","type":"uint256"},{"indexed":true,"internalType":"bytes32","name":"identifier","type":"bytes32"}],"name":"AssertionMade","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"bytes32","name":"assertionId","type":"bytes32"},{"indexed":true,"internalType":"address","name":"bondRecipient","type":"address"},{"indexed":false,"internalType":"bool","name":"disputed","type":"bool"},{"indexed":false,"internalType":"bool","name":"settlementResolution","type":"bool"},{"indexed":false,"internalType":"address","name":"settleCaller","type":"address"}],"name":"AssertionSettled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"inputs":[{"internalType":"bytes","name":"claim","type":"bytes"},{"internalType":"address","name":"asserter","type":"address"},{"internalType":"address","name":"callbackRecipient","type":"address"},{"internalType":"address","name":"escalationManager","type":"address"},{"internalType":"uint64","name":"liveness","type":"uint64"},{"internalType":"contract IERC20","name":"currency","type":"address"},{"internalType":"uint256","name":"bond","type":"uint256"},{"internalType":"bytes32","name":"identifier","type":"bytes32"},{"internalType":"bytes32","name":"domainId","type":"bytes32"}],"name":"assertTruth","outputs":[{"internalType":"bytes32","name":"assertionId","type":"bytes32"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes","name":"claim","type":"bytes"},{"internalType":"address","name":"asserter","type":"address"}],"name":"assertTruthWithDefaults","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"assertions","outputs":[{"components":[{"internalType":"bool","name":"arbitrateViaEscalationManager","type":"bool"},{"internalType":"bool","name":"discardOracle","type":"bool"},{"internalType":"bool","name":"validateDisputers","type":"bool"},{"internalType":"address","name":"assertingCaller","type":"address"},{"internalType":"address","name":"escalationManager","type":"address"}],"internalType":"struct OptimisticOracleV3Interface.EscalationManagerSettings","name":"escalationManagerSettings","type":"tuple"},{"internalType":"address","name":"asserter","type":"address"},{"internalType":"uint64","name":"assertionTime","type":"uint64"},{"internalType":"bool","name":"settled","type":"bool"},{"internalType":"contract IERC20","name":"currency","type":"address"},{"internalType":"uint64","name":"expirationTime","type":"uint64"},{"internalType":"bool","name":"settlementResolution","type":"bool"},{"internalType":"bytes32","name":"domainId","type":"bytes32"},{"internalType":"bytes32","name":"identifier","type":"bytes32"},{"internalType":"uint256","name":"bond","type":"uint256"},{"internalType":"address","name":"callbackRecipient","type":"address"},{"internalType":"address","name":"disputer","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"burnedBondPercentage","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"cachedCurrencies","outputs":[{"internalType":"bool","name":"isWhitelisted","type":"bool"},{"internalType":"uint256","name":"finalFee","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"name":"cachedIdentifiers","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"cachedOracle","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"defaultCurrency","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"defaultIdentifier","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"defaultLiveness","outputs":[{"internalType":"uint64","name":"","type":"uint64"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"assertionId","type":"bytes32"},{"internalType":"address","name":"disputer","type":"address"}],"name":"disputeAssertion","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"finder","outputs":[{"internalType":"contract FinderInterface","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"assertionId","type":"bytes32"}],"name":"getAssertion","outputs":[{"components":[{"components":[{"internalType":"bool","name":"arbitrateViaEscalationManager","type":"bool"},{"internalType":"bool","name":"discardOracle","type":"bool"},{"internalType":"bool","name":"validateDisputers","type":"bool"},{"internalType":"address","name":"assertingCaller","type":"address"},{"internalType":"address","name":"escalationManager","type":"address"}],"internalType":"struct OptimisticOracleV3Interface.EscalationManagerSettings","name":"escalationManagerSettings","type":"tuple"},{"internalType":"address","name":"asserter","type":"address"},{"internalType":"uint64","name":"assertionTime","type":"uint64"},{"internalType":"bool","name":"settled","type":"bool"},{"internalType":"contract IERC20","name":"currency","type":"address"},{"internalType":"uint64","name":"expirationTime","type":"uint64"},{"internalType":"bool","name":"settlementResolution","type":"bool"},{"internalType":"bytes32","name":"domainId","type":"bytes32"},{"internalType":"bytes32","name":"identifier","type":"bytes32"},{"internalType":"uint256","name":"bond","type":"uint256"},{"internalType":"address","name":"callbackRecipient","type":"address"},{"internalType":"address","name":"disputer","type":"address"}],"internalType":"struct OptimisticOracleV3Interface.Assertion","name":"","type":"tuple"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"assertionId","type":"bytes32"}],"name":"getAssertionResult","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentTime","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"currency","type":"address"}],"name":"getMinimumBond","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes[]","name":"data","type":"bytes[]"}],"name":"multicall","outputs":[{"internalType":"bytes[]","name":"results","type":"bytes[]"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"numericalTrue","outputs":[{"internalType":"int256","name":"","type":"int256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"contract IERC20","name":"_defaultCurrency","type":"address"},{"internalType":"uint64","name":"_defaultLiveness","type":"uint64"},{"internalType":"uint256","name":"_burnedBondPercentage","type":"uint256"}],"name":"setAdminProperties","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"assertionId","type":"bytes32"}],"name":"settleAndGetAssertionResult","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"assertionId","type":"bytes32"}],"name":"settleAssertion","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"bytes32","name":"assertionId","type":"bytes32"}],"name":"stampAssertion","outputs":[{"internalType":"bytes","name":"","type":"bytes"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"bytes32","name":"identifier","type":"bytes32"},{"internalType":"address","name":"currency","type":"address"}],"name":"syncUmaParams","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+    return await new defaultWeb3.eth.Contract(abiOracle, settleAddress);
+}
+// load uma oracle contract
 async function loadRegistry(registryAddress) {
     let abiRegistry = [
         {
@@ -385,11 +393,12 @@ async function loadRegistry(registryAddress) {
     return await new defaultWeb3.eth.Contract(abiRegistry, registryAddress);
 }
 // load all contracts
-async function loadPaymentContracts() {
+async function loadContracts() {
     oracle = await loadOracle(oracleAddress);
+    settleContract = await loadSettleContract(settlementAddress);
     registry = await loadRegistry(registryAddress);
 }
-loadPaymentContracts();
+loadContracts();
 
 // switch to required network
 async function switchNetwork(web3, networkName, provider) {
@@ -478,8 +487,15 @@ async function makeAssertion() {
     asserter = connectedAccount;
 
     // make assertion
-    await oracle.methods.assertDataFor(dataId, data, asserter).send({ from: connectedAccount })
+    assertionId = await oracle.methods.assertDataFor(dataId, data, asserter).send({ from: connectedAccount });
+    console.log(assertionId)
 
+    // start 2 min waiting period
+
+}
+
+async function settle() {
+    await settleContract.methods.settleAssertion(assertionId).send({ from: connectedAccount });
 }
 
 function toggleTwitterDiv() {
@@ -500,13 +516,8 @@ async function copyTweet() {
     }, 1000);
 }
 
-// twitter name
-// 1. get id - done
-// 2. translate id to bytes32 - done
-// 3. create <h> = hash(userId + address) - done
-// 4. create template tweet content including <h> - done
-// 5. display 4. - done
-// 6. call assert -> makeAssertion -done
+
+
 
 
 
