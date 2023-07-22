@@ -415,12 +415,24 @@ async function init() {
     provider = window.ethereum;
     await provider.enable();
     web3 = await new Web3(provider);
+    console.log(web3)
     let accounts = await web3.eth.getAccounts();
     connectedAccount = accounts[0];
     console.log(connectedAccount);
     await switchNetwork(web3, "goerli", provider);
     document.getElementById("connectWallet").value = "Disconnect";
     document.getElementById("connectedAddress").innerHTML = "(".concat(connectedAccount.substring(0, 6)).concat("...").concat(connectedAccount.substr(-4)).concat(")");
+}
+
+async function getTwitterID(identifier) {
+    const request = await fetch("https://www.idriss.xyz/v1/getTwitterIDDashboard?identifier=" + encodeURIComponent(identifier));
+    const response = await request.json();
+    return response.twitterID;
+}
+
+async function translateTwitter() {
+    let twitterName = document.getElementById("twitterHandle").value;
+    let userId = await getTwitterID(twitterName);
 }
 
 async function makeAssertion(userId) {
