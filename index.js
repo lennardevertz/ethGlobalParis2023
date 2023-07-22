@@ -1,4 +1,4 @@
-const defaultWeb3 = new Web3(new Web3.providers.HttpProvider(""));
+const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"));
 let oracleAddress = "0x82FcCAA1c9d7130f8141109096c98B0c3D4fC5B6"
 let registryAddress = "0xB0eAED426dFb2aEEFF37ec251aAA52aF2ce525F8"
 let web3;
