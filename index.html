@@ -53,16 +53,18 @@
                     </div>
                     <div id="tweetContentDiv" style="display: none;" class="items-left">
                         <div>
-                            <p class="text-left text-sm text-gray-500 mb-2 mt-2">Tweet the following text from the <span id="twitterName">@twitter</span> account</p>
+                            <p class="text-left text-sm text-gray-500 mb-2 mt-3">Tweet the following text from <span id="twitterName">@twitter</span> and paste the link</p>
                             <div id="tweet-wrapper">
-                                <div class="max-w-xs border border-gray-300 rounded-md content-center p-1 hover:cursor-pointer" onclick="copyTweet();">
+                                <div class="w-full border border-gray-300 rounded-md content-center p-1 hover:cursor-pointer" onclick="copyTweet();">
                                     <span class="text-xs" id="tweetContent">Hey, I am verifying my Twitter name with @IDriss_xyz! #IDriss Verification-ID: 123456</span>
                                 </div>
                                 <div id="tooltip" class="text-sm">Copied!</div>
-                                <input type="text" id="tweetUrl" name="" class="custom-placeholder shadow appearance-none border rounded w-44 mt-4 mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none" placeholder="Tweet URL" autofocus />
                             </div>
                         </div>
-                        <div onclick="makeAssertion()" class="mt-2 group relative w-24 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-400 hover:cursor-pointer">Continue</div>
+                        <div class="flex">
+                            <input type="text" id="tweetUrl" name="" class="custom-placeholder shadow appearance-none border rounded w-44 mt-4 mb-2 py-2 px-3 text-gray-700 leading-tight focus:outline-none" placeholder="Tweet link" autofocus />
+                            <div onclick="makeAssertion()" class="mt-4 mb-2 ml-5 w-24 flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-500 hover:bg-orange-400 hover:cursor-pointer">Continue</div>
+                        </div>
                     </div>
                 </div>
                 <div class="flex items-center mb-2">
