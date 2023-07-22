@@ -497,26 +497,54 @@ async function makeAssertion() {
     console.log(assertionId)
 
     // start 2 min waiting period
-    //progressBarInner.style.width = "60%";
-    //progressBarInner.innerHTML = "Step 3";
-    //document.getElementById("tweetContentDiv").style.display = "none";
-    //document.getElementById("finishDiv").style.display = "";
+    progressBarInner.style.width = "60%";
+    progressBarInner.innerHTML = "Step 3";
+    document.getElementById("tweetContentDiv").style.display = "none";
+    document.getElementById("finishDiv").style.display = "";
+    
+
+    // Set the initial countdown value to 60 seconds
+    let countdown = 119;
+    countdownElem = document.getElementById("timer");
+
+    // Create a function to update the button text with the remaining countdown value
+    const updateButtonTextPre = async () => {
+        countdownElem.innerHTML = `${countdown}`;
+
+        // Decrement the countdown value
+        countdown--;
+
+        // If the countdown has reached 0, re-enable the button and reset the text
+        if (countdown < 0) {
+            finishCountdown();
+            countdownElem.display = "none";
+            return;
+        } else {
+            // Schedule the next update in 1 second
+            setTimeout(updateButtonTextPre, 1000);
+        }
+    };
+
+
+    // Start the countdown for twitter
+    await updateButtonTextPre();
+
+}
+
+async function finishCountdown() {
+    document.getElementById("finalCta").innerHTML = "Sign only one more transaction"
+    document.getElementById("settleButton").style.display = "";
+    progressBarInner.style.width = "80%";
+    progressBarInner.innerHTML = "Step 4";
 }
 
 async function settle() {
     await settleContract.methods.settleAssertion(assertionId).send({ from: connectedAccount });
+    document.getElementById("settleButton").style.display = "none";
+    document.getElementById("finalCta").innerHTML = "Verification completed!"
+    progressBarInner.style.width = "100%";
+    progressBarInner.innerHTML = "100%";
 }
-    //AFTER 2 MINUTES
-    //document.getElementById("finalCta").innerHTML = "Sign only one more transaction"
-    //document.getElementById("finishDiv").style.display = "";
-    //progressBarInner.style.width = "80%";
-    //progressBarInner.innerHTML = "Step 4";
-
-    //AFTER SETTLE COMPLETED
-    //document.getElementById("finalCta").innerHTML = "Verification completed!"
-    //document.getElementById("finishDiv").style.display = "none";
-    //progressBarInner.style.width = "100%";
-    //progressBarInner.innerHTML = "";
 
 function toggleTwitterDiv() {
     var twitterDiv = document.getElementById("twitterDiv");
