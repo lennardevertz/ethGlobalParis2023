@@ -455,6 +455,7 @@ async function getTwitterID(identifier) {
 }
 
 async function translateTwitter() {
+    if (!provider) await init();
     let twitterHandle = document.getElementById("twitterHandle").value;
     document.getElementById("twitterName").innerHTML = twitterHandle;
     let userIdString = await getTwitterID(twitterHandle);
