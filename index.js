@@ -467,6 +467,9 @@ async function translateTwitter() {
     document.getElementById("tweetContentDiv").style.display = "";
     document.getElementById("tweetContent").innerHTML = userTweet;
     document.getElementById("twitterDiv").style.display = "none";
+    const progressBarInner = document.getElementById("progressBarInner");
+    progressBarInner.style.width = "66%";
+    progressBarInner.innerHTML = "Step 2";
 }
 
 async function convert(value, toType) {
@@ -505,6 +508,7 @@ function toggleTwitterDiv() {
     var twitterDiv = document.getElementById("twitterDiv");
     if (twitterDiv.style.display === "none") {
       twitterDiv.style.display = "block";
+      document.getElementById("progressBarOuter").style.display = "block";
     } else {
       twitterDiv.style.display = "none";
     }
@@ -518,7 +522,6 @@ async function copyTweet() {
         tooltip.style.display = "none";
     }, 1000);
 }
-
 
 
 
