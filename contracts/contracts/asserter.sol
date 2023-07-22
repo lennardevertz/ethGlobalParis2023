@@ -4,6 +4,7 @@ pragma solidity ^0.8.16;
 import "@uma/core/contracts/optimistic-oracle-v3/implementation/ClaimData.sol";
 import "@uma/core/contracts/optimistic-oracle-v3/interfaces/OptimisticOracleV3Interface.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "./registry.sol";
 
 // This contract allows assertions on any form of data to be made using the UMA Optimistic Oracle V3 and stores the
 // proposed value so that it may be retrieved on chain. The dataId is intended to be an arbitrary value that uniquely
@@ -15,10 +16,11 @@ contract DataAsserter {
     OptimisticOracleV3Interface public immutable oo;
     uint64 public constant assertionLiveness = 120;
     bytes32 public immutable defaultIdentifier;
+    Registry public registry;
 
     struct DataAssertion {
         bytes32 dataId; // The dataId that was asserted.
-        bytes32 data; // This could be an arbitrary data type.
+        string data; // This could be an arbitrary data type.
         address asserter; // The address that made the assertion.
         bool resolved; // Whether the assertion has been resolved.
     }
@@ -27,27 +29,28 @@ contract DataAsserter {
 
     event DataAsserted(
         bytes32 indexed dataId,
-        bytes32 data,
+        string data,
         address indexed asserter,
         bytes32 indexed assertionId
     );
 
     event DataAssertionResolved(
         bytes32 indexed dataId,
-        bytes32 data,
+        string data,
         address indexed asserter,
         bytes32 indexed assertionId
     );
 
-    constructor(address _defaultCurrency, address _optimisticOracleV3) {
+    constructor(address _defaultCurrency, address _optimisticOracleV3, address _registryAddress) {
         defaultCurrency = IERC20(_defaultCurrency);
         oo = OptimisticOracleV3Interface(_optimisticOracleV3);
         defaultIdentifier = oo.defaultIdentifier();
+        registry = Registry(_registryAddress);
     }
 
     // For a given assertionId, returns a boolean indicating whether the data is accessible and the data itself.
-    function getData(bytes32 assertionId) public view returns (bool, bytes32) {
-        if (!assertionsData[assertionId].resolved) return (false, 0);
+    function getData(bytes32 assertionId) public view returns (bool, string memory) {
+        if (!assertionsData[assertionId].resolved) return (false, "");
         return (true, assertionsData[assertionId].data);
     }
 
@@ -57,7 +60,7 @@ contract DataAsserter {
     // identifiers to able to get the information using getData.
     function assertDataFor(
         bytes32 dataId,
-        bytes32 data,
+        string memory data,
         address asserter
     ) public returns (bytes32 assertionId) {
         asserter = asserter == address(0) ? msg.sender : asserter;
@@ -72,19 +75,7 @@ contract DataAsserter {
         // See the UMIP corresponding to the defaultIdentifier used in the OptimisticOracleV3 "ASSERT_TRUTH" for more
         // information on how to construct the claim.
         assertionId = oo.assertTruth(
-            abi.encodePacked(
-                "Data asserted: 0x", // in the example data is type bytes32 so we add the hex prefix 0x.
-                ClaimData.toUtf8Bytes(data),
-                " for dataId: 0x",
-                ClaimData.toUtf8Bytes(dataId),
-                " and asserter: 0x",
-                ClaimData.toUtf8BytesAddress(asserter),
-                " at timestamp: ",
-                ClaimData.toUtf8BytesUint(block.timestamp),
-                " in the DataAsserter contract at 0x",
-                ClaimData.toUtf8BytesAddress(address(this)),
-                " is valid."
-            ),
+            abi.encodePacked(data),
             asserter,
             address(this),
             address(0), // No sovereign security.
@@ -113,6 +104,9 @@ contract DataAsserter {
         if (assertedTruthfully) {
             assertionsData[assertionId].resolved = true;
             DataAssertion memory dataAssertion = assertionsData[assertionId];
+
+            registry.addOwner(dataAssertion.dataId, dataAssertion.asserter);
+
             emit DataAssertionResolved(
                 dataAssertion.dataId,
                 dataAssertion.data,
