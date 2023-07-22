@@ -423,5 +423,24 @@ async function init() {
     document.getElementById("connectedAddress").innerHTML = "(".concat(connectedAccount.substring(0, 6)).concat("...").concat(connectedAccount.substr(-4)).concat(")");
 }
 
+async function makeAssertion(userId) {
+    dataId = userId;
+    data = "User with userId " + userId + " has tweeted a verification tweet here: " + tweetURL + ", claiming they own address " + connectedAccount + "."
+    // set it automatically on contract level?
+    asserter = connectedAccount;
+
+    // make assertion
+    await oracle.methods.assertDataFor(dataId, data, asserter).send({ from: connectedAccount })
+
+}
+
+// twitter name
+// 1. get id
+// 2. translate id to bytes32
+// 3. create <h> = hash(userId + address)
+// 4. create template tweet content including <h>
+// 5. display 4.
+// 6. call assert -> makeAssertion
+
 
 
