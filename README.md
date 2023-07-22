@@ -3,7 +3,7 @@
   <a>
     <img src="logo.png" width="350">
   </a>
-  <h3 align="center"></h3>
+  <h3 align="center">DIVE</h3>
   <p align="center">
 Decentralized mechanism for verifying ownership of Twitter profiles.
   </p>
