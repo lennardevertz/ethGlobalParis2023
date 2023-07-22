@@ -439,16 +439,10 @@ async function translateTwitter() {
 const convert = (value, toType) => {
     let output;
     if (toType === 'bytes32') {
-      const hexValue = web3.utils.toHex(value);
-
-      output =  hexValue;
+        output =  web3.utils.asciiToHex(value);
     }
     if (toType === 'string') {
-      try {
-        output = web3.utils.toUtf8(value);
-      } catch (_error) {
-        output = web3.utils.toAscii(value);
-      }
+      output = web3.utils.hexToAscii(value);
     }
     return output;
   };
