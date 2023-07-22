@@ -440,7 +440,8 @@ async function translateTwitter() {
     userId =  await convert(userIdString, 'bytes32');
     // hide input and show tweet content
     userHash = web3.utils.keccak256(userId, connectedAccount);
-    userTweet = "I am verifying my Twitter account: ", userHash
+    console.log(userHash)
+    userTweet = "I am verifying my Twitter account: " + userHash
     document.getElementById("tweetContentDiv").style.display = "";
     document.getElementById("tweetContent").innerHTML = userTweet;
     document.getElementById("twitterDiv").style.display = "none";
@@ -491,10 +492,10 @@ async function copyTweet() {
 // twitter name
 // 1. get id - done
 // 2. translate id to bytes32 - done
-// 3. create <h> = hash(userId + address) 
-// 4. create template tweet content including <h>
-// 5. display 4.
-// 6. call assert -> makeAssertion
+// 3. create <h> = hash(userId + address) - done
+// 4. create template tweet content including <h> - done
+// 5. display 4. - done
+// 6. call assert -> makeAssertion -done
 
 
 
