@@ -393,12 +393,12 @@ async function loadRegistry(registryAddress) {
     return await new defaultWeb3.eth.Contract(abiRegistry, registryAddress);
 }
 // load all contracts
-async function loadContracts() {
-    oracle = await loadOracle(oracleAddress);
-    settleContract = await loadSettleContract(settlementAddress);
-    registry = await loadRegistry(registryAddress);
+async function loadContracts(w3) {
+    oracle = await loadOracle(w3, oracleAddress);
+    settleContract = await loadSettleContract(w3, settlementAddress);
+    registry = await loadRegistry(w3, registryAddress);
 }
-loadContracts();
+loadContracts(defaultWeb3);
 
 // switch to required network
 async function switchNetwork(web3, networkName, provider) {
@@ -437,6 +437,7 @@ async function init() {
     document.getElementById("connectWallet").onclick = function () {
         disconnectWallet();
     };
+    await loadContracts(web3);
 }
 
 async function disconnectWallet() {
