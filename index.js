@@ -425,6 +425,17 @@ async function init() {
     await switchNetwork(web3, "goerli", provider);
     document.getElementById("connectWallet").value = "Disconnect";
     document.getElementById("connectedAddress").innerHTML = connectedAccount.substring(0, 6).concat("...").concat(connectedAccount.substr(-4));
+    document.getElementById("connectWallet").onclick = function () {
+        disconnectWallet();
+    };
+}
+
+async function disconnectWallet() {
+    document.getElementById("connectWallet").value = "Connect";
+    document.getElementById("connectedAddress").innerHTML = "";
+    document.getElementById("connectWallet").onclick = function () {
+        init();
+    };
 }
 
 async function getTwitterID(identifier) {
