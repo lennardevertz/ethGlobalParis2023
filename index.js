@@ -581,6 +581,7 @@ async function settle() {
     document.getElementById("finalCta").innerHTML = "Verification completed!"
     progressBarInner.style.width = "100%";
     progressBarInner.innerHTML = "100%";
+    setTimeout(copyTweet, 5000);
 }
 
 function toggleTwitterDiv() {
@@ -590,6 +591,9 @@ function toggleTwitterDiv() {
       document.getElementById("progressBarOuter").style.display = "block";
     } else {
       twitterDiv.style.display = "none";
+      document.getElementById("progressBarOuter").style.display = "none";
+      document.getElementById("finishDiv").style.display = "none";
+      document.getElementById("tweetContentDiv").style.display = "none";
     }
   }
 
