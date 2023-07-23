@@ -15,11 +15,11 @@ Decentralized mechanism for verifying ownership of Twitter profiles onchain.
 - Users attest to ownership of their Twitter profile by posting a predefined tweet
 - UMA's optimistic oracle verifies the existence of the tweet
 - Verified connection is mapped onchain in a smart contract registry 
-- The registry is a public good allowing anyone to write and read entries in a permisionless way
+- The registry is a public good allowing anyone to write and read entries in a permissionless way
 - Applicable to other web2 identifiers
 
 ## Challenges
-- The size of the bond that needs to be posted to the Uma oracle might be prohibitevely high for the users. A potential solution to this problem could be using [Union Finance](https://union.finance/) to give vouches (borrowing power) to users who pass certain verification criteria.
+- The size of the bond that needs to be posted to the UMA oracle might be prohibitevely high for the users. A potential solution to this problem could be using [Union Finance](https://union.finance/) to give vouches (borrowing power) to users who pass certain verification criteria.
 - The dispute window (liveness) can be as long as a few hours, therefore significantly worsening the user experience. 
 
 
