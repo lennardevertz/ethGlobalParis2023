@@ -8,10 +8,12 @@ pragma solidity ^0.8.16;
 
 contract Registry {
     mapping(bytes32 => address) public owners;
+    mapping(address => bytes32) public reverseOwners;
     mapping(address => bool) private admins;
     address public contractOwner = msg.sender;
 
     event Register(bytes32 indexed userId);
+    event ReverseRegister(address indexed asserter);
 
     function setOracle(address oracleAddress) external {
         require(msg.sender == contractOwner, "Not the owner.");
@@ -26,8 +28,10 @@ contract Registry {
         require(admins[msg.sender], "Not called by oracle.");
         
         owners[userId] = asserter;
+        reverseOwners[asserter] = userId;
         
         emit Register(userId);
+        emit ReverseRegister(asserter);
     }
 
     // For a given assertionId, returns a boolean indicating whether the data is accessible and the data itself.
