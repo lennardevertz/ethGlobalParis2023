@@ -8,6 +8,7 @@
 Decentralized mechanism for verifying ownership of Twitter profiles onchain.
   </p>
 <a href="https://lennardevertz.github.io/ethGlobalParis2023/">Live Version</a>
+<a href="https://www.loom.com/share/2efbc917e87f45b8b584f96047672597">Video Demo</a>
 </div>
 
 ## Example
