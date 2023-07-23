@@ -472,7 +472,7 @@ async function init() {
     await loadContracts(web3);
 
     let reverse = await registry.methods.reverseOwners(connectedAccount).call();
-    if (reverseOwners) {
+    if (reverse) {
         document.getElementById('reverseResult').innerHTML = "@"+reverse;
         document.getElementById('reverseResultHref').href = "https://twitter.com/"+reverse;
         document.getElementById('reverseDiv').style.display = "";
