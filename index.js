@@ -456,8 +456,13 @@ async function switchNetwork(web3, networkName, provider) {
 
 // start connection
 async function init() {
-    provider = window.ethereum;
-    await provider.enable();
+  const MMSDK = new MetaMaskSDK()
+
+    provider = MMSDK.getProvider() // You can also access via window.ethereum
+
+    await ethereum.request({method: 'eth_requestAccounts'})
+    // provider = window.ethereum;
+    // await provider.enable();
     web3 = await new Web3(provider);
     console.log(web3)
     let accounts = await web3.eth.getAccounts();
