@@ -1,7 +1,7 @@
 const defaultWeb3 = new Web3(new Web3.providers.HttpProvider("https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"));
-let oracleAddress = "0x82FcCAA1c9d7130f8141109096c98B0c3D4fC5B6"
+let oracleAddress = "0xA19ea0042E9D39DD530439dDAA9028240E29c267"
 let settlementAddress = "0x9923D42eF695B5dd9911D05Ac944d4cAca3c4EAB"
-let registryAddress = "0xB0eAED426dFb2aEEFF37ec251aAA52aF2ce525F8"
+let registryAddress = "0xbF7561af8aba340fCbbc51cf4652DFb1845804DE"
 let web3;
 let connectedAccount;
 let provider;
@@ -294,102 +294,134 @@ async function loadSettleContract(w3, settleAddress) {
 // load uma oracle contract
 async function loadRegistry(w3, registryAddress) {
     let abiRegistry = [
-        {
-          "anonymous": false,
-          "inputs": [
-            {
-              "indexed": true,
-              "internalType": "bytes32",
-              "name": "userId",
-              "type": "bytes32"
-            }
-          ],
-          "name": "Register",
-          "type": "event"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "bytes32",
-              "name": "userId",
-              "type": "bytes32"
-            },
-            {
-              "internalType": "address",
-              "name": "asserter",
-              "type": "address"
-            }
-          ],
-          "name": "addOwner",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "contractOwner",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "bytes32",
-              "name": "userId",
-              "type": "bytes32"
-            }
-          ],
-          "name": "getRegistration",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "bytes32",
-              "name": "",
-              "type": "bytes32"
-            }
-          ],
-          "name": "owners",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "oracleAddress",
-              "type": "address"
-            }
-          ],
-          "name": "setOracle",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        }
-      ];
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "bytes32",
+            "name": "userId",
+            "type": "bytes32"
+          }
+        ],
+        "name": "Register",
+        "type": "event"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "asserter",
+            "type": "address"
+          }
+        ],
+        "name": "ReverseRegister",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "userId",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "address",
+            "name": "asserter",
+            "type": "address"
+          }
+        ],
+        "name": "addOwner",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "contractOwner",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "userId",
+            "type": "bytes32"
+          }
+        ],
+        "name": "getRegistration",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+          }
+        ],
+        "name": "owners",
+        "outputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "",
+            "type": "address"
+          }
+        ],
+        "name": "reverseOwners",
+        "outputs": [
+          {
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "oracleAddress",
+            "type": "address"
+          }
+        ],
+        "name": "setOracle",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ];
     return await new w3.eth.Contract(abiRegistry, registryAddress);
 }
 // load all contracts
@@ -438,6 +470,11 @@ async function init() {
         disconnectWallet();
     };
     await loadContracts(web3);
+
+    let reverse = await registry.methods.reverseOwners(connectedAccount).call();
+    if (reverseOwners) {
+        document.getElementById('reverseResult').innerHTML = "@"+reverse;
+    }
 }
 
 async function disconnectWallet() {

@@ -21,7 +21,7 @@ contract DataAsserter {
     struct DataAssertion {
         bytes32 dataId; // The dataId that was asserted.
         string data; // This could be an arbitrary data type.
-        address asserter; // The address that made the assertion.
+        address asserter; // The address that made the assertion, set to msg.sender
         bool resolved; // Whether the assertion has been resolved.
     }
 
@@ -63,7 +63,7 @@ contract DataAsserter {
         string memory data,
         address asserter
     ) public returns (bytes32 assertionId) {
-        asserter = asserter == address(0) ? msg.sender : asserter;
+        asserter = msg.sender; // default value
         uint256 bond = oo.getMinimumBond(address(defaultCurrency));
         defaultCurrency.safeTransferFrom(msg.sender, address(this), bond);
         defaultCurrency.safeApprove(address(oo), bond);
