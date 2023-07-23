@@ -475,6 +475,9 @@ async function init() {
     if (reverseOwners) {
         document.getElementById('reverseResult').innerHTML = "@"+reverse;
         document.getElementById('reverseResultHref').href = "https://twitter.com/"+reverse;
+        document.getElementById('reverseDiv').style.display = "";
+    } else {
+      document.getElementById('reverseDiv').style.display = "none";
     }
 }
 
