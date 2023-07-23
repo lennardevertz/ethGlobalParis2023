@@ -526,7 +526,10 @@ async function convert(value, toType) {
         output =  web3.utils.asciiToHex(value);
     }
     if (toType === 'string') {
-        output = web3.utils.hexToAscii(value);
+        let res = web3.utils.hexToAscii(value);
+        let nullCharIndex = str.indexOf('\x00');
+        output = res.slice(0, nullCharIndex);
+        
     }
     return output;
 }
@@ -592,7 +595,7 @@ async function settle() {
     document.getElementById("finalCta").innerHTML = "Verification completed!"
     progressBarInner.style.width = "100%";
     progressBarInner.innerHTML = "100%";
-    setTimeout(copyTweet, 5000);
+    setTimeout(toggleTwitterDiv, 5000);
 }
 
 function toggleTwitterDiv() {
