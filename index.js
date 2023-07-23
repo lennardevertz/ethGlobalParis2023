@@ -485,6 +485,8 @@ async function init() {
 async function disconnectWallet() {
     document.getElementById("connectWallet").value = "Connect";
     document.getElementById("connectedAddress").innerHTML = "";
+    document.getElementById("reverseResult").innerHTML = "";
+    document.getElementById('reverseDiv').style.display = "none";
     document.getElementById("connectWallet").onclick = function () {
         init();
     };
@@ -529,7 +531,7 @@ async function convert(value, toType) {
         let res = web3.utils.hexToAscii(value);
         let nullCharIndex = str.indexOf('\x00');
         output = res.slice(0, nullCharIndex);
-        
+
     }
     return output;
 }
