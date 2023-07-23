@@ -529,7 +529,7 @@ async function convert(value, toType) {
     }
     if (toType === 'string') {
         let res = web3.utils.hexToAscii(value);
-        let nullCharIndex = str.indexOf('\x00');
+        let nullCharIndex = res.indexOf('\x00');
         output = res.slice(0, nullCharIndex);
 
     }
