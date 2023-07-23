@@ -474,6 +474,7 @@ async function init() {
     let reverse = await registry.methods.reverseOwners(connectedAccount).call();
     if (reverseOwners) {
         document.getElementById('reverseResult').innerHTML = "@"+reverse;
+        document.getElementById('reverseResultHref').href = "https://twitter.com/"+reverse;
     }
 }
 
