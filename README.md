@@ -37,6 +37,7 @@ Decentralized mechanism for verifying ownership of Twitter profiles onchain.
 | Gnosis | [Oracle](https://gnosisscan.io/address/0x6a32501612b3c954cb0f97ba61e0440f81dbf8da) | 0x6A32501612B3C954cb0f97BA61E0440F81Dbf8da |
 - Hardhat
 - Truffle Dashboard
+- [IDriss](https://www.idriss.xyz/)
 
 
 The background image used in the logo was generated with the [Midjourney](https://www.midjourney.com/) text-to-image AI model. Prompt: a group of people using magnifying lenses and telescopes to watch a flight of a single Twitter bird --v 5.1</p>
