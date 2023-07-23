@@ -473,6 +473,7 @@ async function init() {
 
     let reverse = await registry.methods.reverseOwners(connectedAccount).call();
     if (reverse!=="0x0000000000000000000000000000000000000000000000000000000000000000") {
+        let twitterName = await getTwitterName(await convert(reverse, 'string'));
         document.getElementById('reverseResult').innerHTML = "@"+reverse;
         document.getElementById('reverseResultHref').href = "https://twitter.com/"+reverse;
         document.getElementById('reverseDiv').style.display = "";
@@ -493,6 +494,12 @@ async function getTwitterID(identifier) {
     const request = await fetch("https://www.idriss.xyz/v1/getTwitterIDDashboard?identifier=" + encodeURIComponent(identifier));
     const response = await request.json();
     return response.twitterID;
+}
+
+async function getTwitterName(userId) {
+  const request = await fetch("https://www.idriss.xyz/v1/getTwitterNames?ids=" + encodeURIComponent(userId));
+  const response = await request.json();
+  return response.twitterNames[userId];
 }
 
 async function translateTwitter() {
