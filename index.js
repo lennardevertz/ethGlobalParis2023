@@ -604,6 +604,15 @@ async function settle() {
     progressBarInner.style.width = "100%";
     progressBarInner.innerHTML = "100%";
     setTimeout(toggleTwitterDiv, 5000);
+    let reverse = await registry.methods.reverseOwners(connectedAccount).call();
+    if (reverse!=="0x0000000000000000000000000000000000000000000000000000000000000000") {
+        let twitterName = await getTwitterName(await convert(reverse, 'string'));
+        document.getElementById('reverseResult').innerHTML = "@"+twitterName;
+        document.getElementById('reverseResultHref').href = "https://twitter.com/"+twitterName;
+        document.getElementById('reverseDiv').style.display = "";
+    } else {
+      document.getElementById('reverseDiv').style.display = "none";
+    }
 }
 
 function toggleTwitterDiv() {
